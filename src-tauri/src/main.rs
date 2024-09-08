@@ -137,7 +137,7 @@ fn kill_other_instances() {
         if proc.name() == current_exe.file_name().unwrap().to_str().unwrap()
             && *pid != current_pid
         {
-            println!("Killing process: {}", pid);
+            // println!("Killing process: {}", pid);
             proc.kill();
         }
     }
