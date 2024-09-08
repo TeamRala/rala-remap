@@ -125,8 +125,9 @@ fn load_mappings() -> Vec<Mapping> {
 }
 
 fn main() {
+    let show = CustomMenuItem::new("show".to_string(), "Show");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let tray_menu = SystemTrayMenu::new().add_item(quit);
+    let tray_menu = SystemTrayMenu::new().add_item(show).add_item(quit);
     let system_tray = SystemTray::new().with_menu(tray_menu);
 
     tauri::Builder::default()
@@ -142,11 +143,35 @@ fn main() {
 
             Ok(())
         })
+        .on_window_event(|event| {
+            if let tauri::WindowEvent::CloseRequested { api, .. } =
+                event.event()
+            {
+                event.window().hide().unwrap();
+                api.prevent_close();
+            }
+        })
         .system_tray(system_tray)
-        .on_system_tray_event(|_app, event| match event {
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::LeftClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                let window = app.get_window("main").unwrap();
+                if !(window.is_visible().unwrap()) {
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
+            }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "quit" => {
                     std::process::exit(0);
+                }
+                "show" => {
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
                 }
                 _ => {}
             },

@@ -6,6 +6,7 @@
 	import { buttonVariants } from "$shadcn/button";
 	import AddMappingDialog from "$lib/components/AddMappingDialog.svelte";
 	import MappingsList from "$lib/components/MappingsList.svelte";
+	import CustomTitlebar from "$lib/components/CustomTitlebar.svelte";
 
 	type Mapping = {
 		mouse_button: number;
@@ -31,18 +32,21 @@
 	}
 </script>
 
-<div class="p-8 flex flex-col gap-4">
-	<h1 class="text-2xl font-bold">Mouse to Keyboard key remapping</h1>
+<div class="flex flex-col h-screen">
+	<CustomTitlebar />
+	<div class="flex-grow p-8 flex flex-col gap-4 overflow-auto">
+		<h1 class="text-2xl font-bold">Mouse to Keyboard key remapping</h1>
 
-	<!-- TEST INPUT -->
-	<Input type="text" placeholder="Type something..." />
+		<!-- TEST INPUT -->
+		<Input type="text" placeholder="Type something..." />
 
-	<div class="space-y-4">
-		<MappingsList {mouseMappings} on:delete={e => deleteMapping(e.detail)} />
+		<div class="space-y-4">
+			<MappingsList {mouseMappings} on:delete={e => deleteMapping(e.detail)} />
 
-		<Dialog.Root>
-			<Dialog.Trigger class={buttonVariants({ variant: "default" })}>Add mapping</Dialog.Trigger>
-			<AddMappingDialog on:addMapping={e => addMapping(e.detail)} />
-		</Dialog.Root>
+			<Dialog.Root>
+				<Dialog.Trigger class={buttonVariants({ variant: "default" })}>Add mapping</Dialog.Trigger>
+				<AddMappingDialog on:addMapping={e => addMapping(e.detail)} />
+			</Dialog.Root>
+		</div>
 	</div>
 </div>
