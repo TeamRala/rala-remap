@@ -5,8 +5,10 @@ use rdev::{listen, simulate, Button, EventType, Key};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
+use std::process;
 use std::sync::{Arc, Mutex};
 use std::thread;
+use sysinfo::{Pid, ProcessExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
 };
@@ -124,7 +126,26 @@ fn load_mappings() -> Vec<Mapping> {
     }
 }
 
+fn kill_other_instances() {
+    let mut system = System::new_all();
+    system.refresh_processes();
+
+    let current_pid = Pid::from(process::id() as usize);
+    let current_exe = std::env::current_exe().unwrap();
+
+    for (pid, proc) in system.processes() {
+        if proc.name() == current_exe.file_name().unwrap().to_str().unwrap()
+            && *pid != current_pid
+        {
+            println!("Killing process: {}", pid);
+            proc.kill();
+        }
+    }
+}
+
 fn main() {
+    kill_other_instances();
+
     let show = CustomMenuItem::new("show".to_string(), "Show");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let tray_menu = SystemTrayMenu::new().add_item(show).add_item(quit);
