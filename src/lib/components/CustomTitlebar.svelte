@@ -11,9 +11,12 @@
 	}
 </script>
 
-<div class="flex justify-between items-center bg-primary text-primary-foreground p-2">
-	<div class="flex-grow" data-tauri-drag-region>Rala Remap</div>
-	<div>
+<div
+	class="flex justify-between items-center bg-primary text-primary-foreground p-2"
+	data-tauri-drag-region
+>
+	<div class="flex-grow pointer-events-none">Rala Remap</div>
+	<div class="">
 		<Button variant="ghost" size="icon" on:click={minimizeWindow}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

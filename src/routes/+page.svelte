@@ -35,7 +35,7 @@
 <div class="flex flex-col h-screen">
 	<CustomTitlebar />
 	<div class="flex-grow p-8 flex flex-col gap-4 overflow-auto">
-		<h1 class="text-2xl font-bold">Mouse to Keyboard key remapping</h1>
+		<h1 class="text-2xl font-bold">Mouse button to Keyboard key remapping</h1>
 
 		<!-- TEST INPUT -->
 		<Input type="text" placeholder="Type something..." />

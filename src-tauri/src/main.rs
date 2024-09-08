@@ -60,8 +60,8 @@ fn start_event_listener(mappings: Arc<Mutex<Vec<Mapping>>>) {
                         Button::Left => 0,
                         Button::Middle => 1,
                         Button::Right => 2,
-                        Button::Unknown(2) => 3,
-                        Button::Unknown(1) => 4,
+                        Button::Unknown(2) => 4,
+                        Button::Unknown(1) => 3,
                         _ => 0,
                     };
 
