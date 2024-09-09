@@ -1,14 +1,12 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
 	import { Button } from "$shadcn/button";
 
-	export let mouseMappings: Array<{ mouse_button: number; keyboard_key: string }>;
-
-	const dispatch = createEventDispatcher();
-
-	function handleDelete(mouseButton: number) {
-		dispatch("delete", mouseButton);
+	interface Props {
+		mouseMappings: Array<{ mouse_button: number; keyboard_key: string }>;
+		deleteMapping: (mouseButton: number) => void;
 	}
+
+	let { mouseMappings, deleteMapping }: Props = $props();
 </script>
 
 {#if mouseMappings.length > 0}
@@ -16,9 +14,9 @@
 		{#each mouseMappings as mapping}
 			<li class="flex justify-between items-center bg-secondary p-2 rounded">
 				<span>Mouse Button {mapping.mouse_button} → {mapping.keyboard_key}</span>
-				<Button variant="destructive" on:click={() => handleDelete(mapping.mouse_button)}
-					>Delete</Button
-				>
+				<Button variant="destructive" onclick={() => deleteMapping(mapping.mouse_button)}>
+					Delete
+				</Button>
 			</li>
 		{/each}
 	</ul>

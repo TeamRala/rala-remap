@@ -1,33 +1,30 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
 	import * as Dialog from "$shadcn/dialog";
+	import { Button } from "$shadcn/button";
 	import { Dialog as DialogPrimitive } from "bits-ui";
 	import { Input } from "$shadcn/input";
-	import { Button } from "$shadcn/button";
 
-	let mouseButton: number | null = null;
-	let keyboardKey: string = "";
+	interface Props {
+		addMapping: (mouse_button: number, keyboard_key: string) => void;
+	}
 
-	const dispatch = createEventDispatcher<{
-		addMapping: { mouse_button: number; keyboard_key: string };
-	}>();
+	let { addMapping }: Props = $props();
+	let mouse_button: number | null = $state(null);
+	let keyboard_key = $state("Press a key");
 
 	function handleMouseDown(event: MouseEvent) {
 		event.preventDefault();
-		// cancel context menu
-		event.stopPropagation();
-		mouseButton = event.button;
-		console.log(event.button);
+		mouse_button = event.button;
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
 		event.preventDefault();
-		keyboardKey = event.key;
+		keyboard_key = event.key;
 	}
 
 	function handleSubmit() {
-		if (mouseButton !== null && keyboardKey) {
-			dispatch("addMapping", { mouse_button: mouseButton, keyboard_key: keyboardKey });
+		if (mouse_button !== null && keyboard_key) {
+			addMapping(mouse_button, keyboard_key);
 		}
 	}
 </script>
@@ -41,13 +38,13 @@
 	<div class="grid gap-4 py-4">
 		<div class="grid grid-cols-4 items-center gap-4">
 			<label for="mouseButton" class="text-right">Mouse Button:</label>
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
 				id="mouseButton"
 				class="col-span-3 border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer"
-				on:mousedown={handleMouseDown}
+				onmousedown={handleMouseDown}
 			>
-				{mouseButton !== null ? `Button ${mouseButton}` : "Click here"}
+				{mouse_button !== null ? `Button ${mouse_button}` : "Click here"}
 			</div>
 		</div>
 		<div class="grid grid-cols-4 items-center gap-4">
@@ -55,7 +52,7 @@
 			<Input
 				id="keyboardKey"
 				class="col-span-3"
-				value={keyboardKey || "Press a key"}
+				value={keyboard_key}
 				on:keydown={handleKeyDown}
 				readonly
 			/>
@@ -63,6 +60,8 @@
 	</div>
 
 	<Dialog.Footer>
-		<Button on:click={handleSubmit}>Add Mapping</Button>
+		<DialogPrimitive.Close asChild let:builder>
+			<Button on:click={handleSubmit} builders={[builder]}>Add Mapping</Button>
+		</DialogPrimitive.Close>
 	</Dialog.Footer>
 </Dialog.Content>

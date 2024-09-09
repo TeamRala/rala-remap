@@ -12,7 +12,7 @@
 </script>
 
 <div
-	class="flex justify-between items-center bg-primary text-primary-foreground p-2"
+	class="flex justify-between items-center bg-primary text-primary-foreground p-2 z-60"
 	data-tauri-drag-region
 >
 	<div class="flex-grow pointer-events-none">Rala Remap</div>
