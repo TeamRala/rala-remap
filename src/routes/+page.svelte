@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { invoke } from "@tauri-apps/api/tauri";
 	import * as Dialog from "$shadcn/dialog";
+	import AddMappingDialog from "$lib/components/AddMappingDialog.svelte";
+	import CustomTitlebar from "$lib/components/CustomTitlebar.svelte";
+	import MappingsList from "$lib/components/MappingsList.svelte";
 	import { Input } from "$shadcn/input";
 	import { buttonVariants } from "$shadcn/button";
-	import AddMappingDialog from "$lib/components/AddMappingDialog.svelte";
-	import MappingsList from "$lib/components/MappingsList.svelte";
-	import CustomTitlebar from "$lib/components/CustomTitlebar.svelte";
+	import { invoke } from "@tauri-apps/api/tauri";
+	import { onMount } from "svelte";
 
 	type Mapping = {
 		mouse_button: number;
@@ -15,15 +15,11 @@
 
 	let mouseMappings: Mapping[] = [];
 
-	onMount(async () => {
-		mouseMappings = await invoke("get_mappings");
-	});
+	onMount(async () => (mouseMappings = await invoke("get_mappings")));
 
 	async function addMapping(mapping: Mapping) {
 		await invoke("add_mapping", { mapping });
 		mouseMappings = await invoke("get_mappings");
-
-		console.log(mouseMappings);
 	}
 
 	async function deleteMapping(mouseButton: number) {
@@ -32,7 +28,7 @@
 	}
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen relative">
 	<CustomTitlebar />
 	<div class="flex-grow p-8 flex flex-col gap-4 overflow-auto">
 		<h1 class="text-2xl font-bold">Mouse button to Keyboard key remapping</h1>

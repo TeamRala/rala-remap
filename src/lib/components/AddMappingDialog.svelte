@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
 	import * as Dialog from "$shadcn/dialog";
+	import { Button } from "$shadcn/button";
 	import { Dialog as DialogPrimitive } from "bits-ui";
 	import { Input } from "$shadcn/input";
-	import { Button } from "$shadcn/button";
+	import { createEventDispatcher } from "svelte";
 
 	let mouseButton: number | null = null;
 	let keyboardKey: string = "";
@@ -14,10 +14,7 @@
 
 	function handleMouseDown(event: MouseEvent) {
 		event.preventDefault();
-		// cancel context menu
-		event.stopPropagation();
 		mouseButton = event.button;
-		console.log(event.button);
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
@@ -63,6 +60,8 @@
 	</div>
 
 	<Dialog.Footer>
-		<Button on:click={handleSubmit}>Add Mapping</Button>
+		<DialogPrimitive.Close asChild let:builder>
+			<Button on:click={handleSubmit} builders={[builder]}>Add Mapping</Button>
+		</DialogPrimitive.Close>
 	</Dialog.Footer>
 </Dialog.Content>
