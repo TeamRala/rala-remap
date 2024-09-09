@@ -5,26 +5,26 @@
 	import { Input } from "$shadcn/input";
 
 	interface Props {
-		addMapping: (mouse_button: number, keyboard_key: string) => void;
+		addMapping: (mouseButton: number, keyboardKey: string) => void;
 	}
 
 	let { addMapping }: Props = $props();
-	let mouse_button: number | null = $state(null);
-	let keyboard_key = $state("Press a key");
+	let mouseButton: number | null = $state(null);
+	let keyboardKey = $state("Press a key");
 
 	function handleMouseDown(event: MouseEvent) {
 		event.preventDefault();
-		mouse_button = event.button;
+		mouseButton = event.button;
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
 		event.preventDefault();
-		keyboard_key = event.key;
+		keyboardKey = event.key;
 	}
 
 	function handleSubmit() {
-		if (mouse_button !== null && keyboard_key) {
-			addMapping(mouse_button, keyboard_key);
+		if (mouseButton !== null && keyboardKey) {
+			addMapping(mouseButton, keyboardKey);
 		}
 	}
 </script>
@@ -44,7 +44,7 @@
 				class="col-span-3 border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer"
 				onmousedown={handleMouseDown}
 			>
-				{mouse_button !== null ? `Button ${mouse_button}` : "Click here"}
+				{mouseButton !== null ? `Button ${mouseButton}` : "Click here"}
 			</div>
 		</div>
 		<div class="grid grid-cols-4 items-center gap-4">
@@ -52,7 +52,7 @@
 			<Input
 				id="keyboardKey"
 				class="col-span-3"
-				value={keyboard_key}
+				value={keyboardKey}
 				on:keydown={handleKeyDown}
 				readonly
 			/>
